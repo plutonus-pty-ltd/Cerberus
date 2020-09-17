@@ -8,7 +8,8 @@ const intf = require("biguint-format");
 const db = require("better-sqlite3");
 
 module.exports = class Database {
-	constructor() {
+	constructor(client) {
+		this.client = client;
 		this.events = new events.EventEmitter();
 		this.db = false;
 

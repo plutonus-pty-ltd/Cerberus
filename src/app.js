@@ -31,3 +31,5 @@ cerb.log("Starting Cerberus...");
 cerb.registerDiscord(process.env.DISCORD_TOKEN);
 cerb.registerWebservice({VHOST_DOMAIN: process.env.VHOST_DOMAIN, WEBSERVICE_PORT: process.env.WEBSERVICE_PORT, JWT_SECRET: process.env.JWT_SECRET});
 cerb.registerDatabase();
+
+module.exports = cerb;

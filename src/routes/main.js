@@ -5,8 +5,10 @@ app.get("/", (req, res) => {
 	res.status(200).send("OK");
 });
 
-module.exports = {
-	name: "Main",
-	dir: "/",
-	router: app
+module.exports = client => {
+	return {
+		name: "Main",
+		dir: "/",
+		router: app
+	}
 }

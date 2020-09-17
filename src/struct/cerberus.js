@@ -15,9 +15,9 @@ module.exports = class Cerberus {
 			db: db
 		}
 		this.services = {
-			discord: false,
-			web: false,
-			db: false
+			discord: new this.modules.discord.Client(this),
+			web: new this.modules.web(this),
+			db: new this.modules.db(this)
 		}
 		this.sev = {
 			d: false,
@@ -33,9 +33,7 @@ module.exports = class Cerberus {
 	}
 
 	registerDiscord(token) {
-		if(this.services.discord) throw new Error("Discord client is already instantiated. Use <Cerberus.killDiscord()> first.");
 		if(!token) throw new Error("No token passed.");
-		this.services.discord = new this.modules.discord.Client();
 
 		this.services.discord.on("ready", () => this.events.emit("discord/ready"));
 		this.services.discord.on("message", msg => this.events.emit("discord/message", msg));
@@ -45,12 +43,10 @@ module.exports = class Cerberus {
 	}
 
 	registerWebservice(data) {
-		if(this.services.web) throw new Error("Webservice client is already instantiated.");
 		if(!data) throw new Error("No data passed.");
 		if(!data.WEBSERVICE_PORT) throw new Error("No WEBSERVICE_PORT passed.");
 		if(!data.VHOST_DOMAIN) throw new Error("No VHOST_DOMAIN passed.");
 		if(!data.JWT_SECRET) throw new Error("No JWT_SECRET passed.");
-		this.services.web = new this.modules.web();
 		this.sev.w = this.services.web.events;
 
 		this.sev.w.on("ready", () => this.events.emit("web/ready"));
@@ -60,7 +56,6 @@ module.exports = class Cerberus {
 	}
 
 	registerDatabase() {
-		this.services.db = new this.modules.db();
 		this.sev.db = this.services.db.events;
 
 		this.sev.db.on("ready", () => this.events.emit("db/ready"));

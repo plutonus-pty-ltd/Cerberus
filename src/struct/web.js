@@ -15,7 +15,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 module.exports = class Webservice {
-	constructor() {
+	constructor(client) {
+		this.client = client;
 		this.events = new events.EventEmitter();
 		this.routes = [];
 		return this;
@@ -28,7 +29,7 @@ module.exports = class Webservice {
 		if(!data.JWT_SECRET) throw new Error("No JWT_SECRET provided.");
 
 		for (const routeFile of fs.readdirSync("./routes").filter(file => file.endsWith(".js"))) {
-			const route = require(`../routes/${routeFile}`);
+			const route = require(`../routes/${routeFile}`)(this.client);
 			this.routes.push({name:route.name, dir:route.dir, router:route.router});
 
 			if(route.dir.endsWith(".")) {
