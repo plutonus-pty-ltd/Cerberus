@@ -9,10 +9,16 @@ const vhost = require("vhost");
 const subdomain = require("express-subdomain");
 const exphbs = require("express-handlebars");
 
-app.engine("hbs", exphbs());
+app.engine("hbs", exphbs({
+	extname: ".hbs",
+	layoutsDir: __dirname + "/../views/layouts",
+	partialsDir: __dirname + "/../views/partials"
+}));
 app.set("view engine", "hbs");
+app.set("views", __dirname + "/../views");
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
+app.use("/assets", express.static(__dirname+"/../assets"));
 
 module.exports = class Webservice {
 	constructor(client) {
